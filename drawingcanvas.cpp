@@ -53,17 +53,11 @@ void DrawingCanvas::segmentDetection(){
             }
 
             if (foundNonEmpty) {
-                // ...store its center point (i, j) to be marked.
                 m_markerPoints.append(QPoint(i, j));
 
-                // Your CustomMatrix logic can remain if you need it for other things
                 CustomMatrix mat(local_window);
-                // windows.push_back(mat); // Your original line
+                // windows.push_back(mat);
             }
-
-            CustomMatrix mat(local_window);
-
-            windows.push_back(mat);
         }
     }
     //cout << "end test " << endl;
@@ -112,7 +106,7 @@ void DrawingCanvas::paintEvent(QPaintEvent *event){
         painter.setPen(markerPen);
 
         // Draw all the marker points we found
-        for (const QPoint& point : std::as_const(m_markerPoints)) {
+        for (const QPoint& point : as_const(m_markerPoints)) {
             painter.drawPoint(point);
         }
     }
