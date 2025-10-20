@@ -9,6 +9,7 @@ DrawingCanvas::DrawingCanvas(QWidget *parent)  {
 
 void DrawingCanvas::clearPoints(){
     m_points.clear();
+    m_markerPoints.clear();
     // Trigger a repaint to clear the canvas
     update();
 }
@@ -38,14 +39,26 @@ void DrawingCanvas::segmentDetection(){
     for(int i = 1; i < image.width()-1;i++){
         for(int j = 1; j < image.height()-1;j++){
             bool local_window[3][3] = {false};
+            bool foundNonEmpty = false;
 
             for(int m=-1;m<=1;m++){
                 for(int n=-1;n<=1;n++){
                     QRgb rgbValue = image.pixel(i+m, j+n);
                     if (local_window[m+1][n+1] = (rgbValue != 0xffffffff)) {
                         cout << "non empty window = (" << i << "," << j << ")" << endl;
+                        local_window[m + 1][n + 1] = true;
+                        foundNonEmpty = true;
                     }
                 }
+            }
+
+            if (foundNonEmpty) {
+                // ...store its center point (i, j) to be marked.
+                m_markerPoints.append(QPoint(i, j));
+
+                // Your CustomMatrix logic can remain if you need it for other things
+                CustomMatrix mat(local_window);
+                // windows.push_back(mat); // Your original line
             }
 
             CustomMatrix mat(local_window);
@@ -54,6 +67,7 @@ void DrawingCanvas::segmentDetection(){
         }
     }
     //cout << "end test " << endl;
+    update();
     return;
 }
 
@@ -90,6 +104,17 @@ void DrawingCanvas::paintEvent(QPaintEvent *event){
         //return painter pen to blue
         pen.setColor(Qt::blue);
         painter.setPen(pen);
+
+        QPainter painter(this);
+
+        QPen markerPen(QColor("#8A2BE2")); // Purple
+        markerPen.setWidth(2); // Make the points 2x2 pixels
+        painter.setPen(markerPen);
+
+        // Draw all the marker points we found
+        for (const QPoint& point : std::as_const(m_markerPoints)) {
+            painter.drawPoint(point);
+        }
     }
 }
 
