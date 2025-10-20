@@ -17,7 +17,8 @@ if true, print the window coordinate (x,y)
 
 3. Develop automated algorithm based on the previous findings to detect all potential candidates
 of a segment.
-i managed to make a small purple point (i can't seem to draw rectangle) that copy of the position of the draw points, but the position is off, i think because i didn't managed to find the ideal window size to detect segment.
+i managed to make a small purple point (i can't seem to draw rectangle) that copy of the position of the draw points, but the position is off, i think because i didn't managed to find the ideal window size to detect segment. 
+the logic is so i store every x,y of non empty windows detected to markerpoints and draw it with purple points
 
 AI Reference:
 for first 2 objective:
